@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>I'm Sorry I Missed Your Birthday </title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    overflow-x: hidden;
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, #ffd6e7 0%, #ffe5ec 25%, #fff0f5 50%, #ffe5ec 75%, #ffd6e7 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    min-height: 100vh;
+    color: #5a2a3a;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Floating hearts background */
+  .hearts-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .heart {
+    position: absolute;
+    bottom: -50px;
+    font-size: 24px;
+    animation: floatUp linear infinite;
+    opacity: 0.7;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Sections */
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  /* Opening */
+  .opening h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(3rem, 10vw, 6rem);
+    color: #d6336c;
+    text-shadow: 2px 2px 0 #fff, 4px 4px 20px rgba(214, 51, 108, 0.3);
+    animation: bounceIn 1.5s ease;
+    margin-bottom: 20px;
+  }
+
+  .opening p {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    color: #a61e4d;
+    animation: fadeUp 2s ease 0.5s both;
+    margin-bottom: 30px;
+  }
+
+  .scroll-hint {
+    margin-top: 40px;
+    font-size: 1rem;
+    color: #d6336c;
+    animation: bounce 2s infinite;
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Section question prompt */
+  .question {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: #d6336c;
+    margin: 30px 0 25px;
+  }
+
+  /* Buttons wrapper - shared */
+  .buttons-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .btn {
+    padding: 16px 38px;
+    font-size: 1.15rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 8px 20px rgba(214, 51, 108, 0.3);
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, #ff6b9d, #d6336c);
+    color: white;
+    position: relative;
+    z-index: 5;
+  }
+
+  .btn-yes:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 30px rgba(214, 51, 108, 0.5);
+  }
+
+  .btn-yes.unlocked {
+    animation: pulseGlow 1.5s infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 8px 20px rgba(214, 51, 108, 0.3); }
+    50% { box-shadow: 0 8px 40px rgba(214, 51, 108, 0.8), 0 0 30px #ffb3c6; }
+  }
+
+  .btn-no {
+    background: white;
+    color: #d6336c;
+    border: 2px solid #d6336c;
+  }
+
+  /* Letter card */
+  .letter-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 40px 30px;
+    max-width: 550px;
+    box-shadow: 0 20px 60px rgba(214, 51, 108, 0.2);
+    border: 2px dashed #ffb3c6;
+    position: relative;
+  }
+
+  .letter-card h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2rem, 6vw, 3rem);
+    color: #d6336c;
+    margin-bottom: 20px;
+  }
+
+  .letter-card p {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+    line-height: 1.6;
+    color: #5a2a3a;
+    margin-bottom: 15px;
+  }
+
+  /* Polaroid */
+  .polaroid {
+    background: white;
+    padding: 15px 15px 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transform: rotate(-3deg);
+    max-width: 280px;
+    margin: 20px auto;
+    font-family: 'Caveat', cursive;
+    transition: transform 0.3s;
+  }
+
+  .polaroid:hover {
+    transform: rotate(0deg) scale(1.05);
+  }
+
+  .polaroid-img {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #ffb3c6, #ff6b9d);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    margin-bottom: 12px;
+  }
+
+  .polaroid-caption {
+    text-align: center;
+    color: #5a2a3a;
+    font-size: 1.3rem;
+  }
+
+  /* Final celebration */
+  .final-message {
+    display: none;
+    text-align: center;
+    animation: bounceIn 1s ease;
+  }
+
+  .final-message.show {
+    display: block;
+  }
+
+  .final-message h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: #d6336c;
+    margin-bottom: 20px;
+  }
+
+  .final-message p {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    color: #a61e4d;
+    margin-bottom: 15px;
+  }
+
+  .cake {
+    font-size: clamp(5rem, 15vw, 8rem);
+    animation: cakeWiggle 2s ease-in-out infinite;
+    display: inline-block;
+    margin: 20px 0;
+  }
+
+  @keyframes cakeWiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  /* Locked message */
+  .locked-hint {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #a61e4d;
+    margin-top: 15px;
+  }
+
+  /* Confetti */
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    z-index: 100;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0.5; }
+  }
+
+  /* Progress dots */
+  .progress {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 50;
+    background: rgba(255,255,255,0.7);
+    padding: 10px 14px;
+    border-radius: 30px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 15px rgba(214, 51, 108, 0.2);
+  }
+
+  .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ffd6e7;
+    border: 2px solid #ffb3c6;
+    transition: all 0.4s;
+  }
+
+  .dot.done {
+    background: #d6336c;
+    border-color: #d6336c;
+    transform: scale(1.2);
+  }
+
+  /* Score / mini badge under each question */
+  .answered {
+    margin-top: 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #d6336c;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s;
+  }
+
+  .answered.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .footer-note {
+    text-align: center;
+    padding: 30px 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: #a61e4d;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 600px) {
+    .buttons-wrap { gap: 15px; }
+    .btn { padding: 14px 30px; font-size: 1rem; }
+    .progress { top: 10px; right: 10px; padding: 8px 10px; }
+    .dot { width: 10px; height: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="hearts"></div>
+
+<!-- Progress tracker -->
+<div class="progress" id="progress">
+  <div class="dot" id="dot0"></div>
+  <div class="dot" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+</div>
+
+<!-- Section 1: Opening -->
+<section class="opening">
+  <h1>I'm so sorry...</h1>
+  <p>I missed your birthday </p>
+  <div class="polaroid">
+    <div class="polaroid-img"></div>
+    <p class="polaroid-caption">...and I feel awful</p>
+  </div>
+
+  <p class="question">First, are you a tiny bit mad at me?</p>
+  <div class="buttons-wrap">
+    <button class="btn btn-yes runaway-yes" data-step="0">Yes (a little) </button>
+    <button class="btn btn-no runaway-btn">No, never </button>
+  </div>
+  <p class="answered" id="ans0">okay deep breath, here it goes </p>
+
+  <div class="scroll-hint">scroll for more </div>
+</section>
+
+<!-- Section 2: The letter -->
+<section>
+  <div class="letter-card">
+    <h2>Dear You,</h2>
+    <p>I know I messed up. Big time.</p>
+    <p>You're one of the important people in my life — and I forgot the one day that's supposed to be all about you. </p>
+    <p>There's no good excuse. Life got loud, my head got messy, and time slipped right through my fingers. But you deserved to be celebrated, loved, and made to feel special.</p>
+    <p>So here's me, with the most heartfelt belated wishes I can possibly send.</p>
+  </div>
+
+  <p class="question">Will you hear me out?</p>
+  <div class="buttons-wrap">
+    <button class="btn btn-no runaway-btn">No </button>
+    <button class="btn btn-yes runaway-yes" data-step="1">Yes, go on </button>
+  </div>
+  <p class="answered" id="ans1">thank you, you're already too sweet </p>
+</section>
+
+<!-- Section 3: Final forgive -->
+<section>
+  <h2 style="font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 8vw, 4rem); color: #d6336c; margin-bottom: 15px;">The big one </h2>
+  <p style="font-family: 'Caveat', cursive; font-size: clamp(1.4rem, 4vw, 2rem); color: #a61e4d;">
+    Will you forgive me?
+  </p>
+
+  <div class="buttons-wrap" id="finalButtons" style="margin-top: 30px;">
+    <button class="btn btn-yes runaway-yes" data-step="2" id="finalYes">Yes, of course </button>
+    <button class="btn btn-no runaway-btn">No </button>
+  </div>
+  <p class="locked-hint" id="lockedHint">(answer the questions above first to unlock )</p>
+</section>
+
+<!-- Section 5: Celebration -->
+<section>
+  <div class="final-message" id="finalMessage">
+    <h2>Happy Belated Birthday! </h2>
+    <div class="cake"></div>
+    <p>Late or not — I'll always show up for you.</p>
+    <p style="font-size: 2rem; margin-top: 30px;"> wishing you all the love & magic </p>
+    <p style="margin-top: 20px;">— with all my heart</p>
+  </div>
+  <div id="placeholderMsg" style="text-align:center;">
+    <p style="font-family: 'Caveat', cursive; font-size: 1.5rem; color: #a61e4d;">click "yes" up there to unlock your surprise </p>
+  </div>
+</section>
+
+<div class="footer-note">
+  made with lots of love, regret, and even more love
+</div>
+
+<script>
+  // Floating hearts
+  const heartsContainer = document.getElementById('hearts');
+  const heartEmojis = ['', '', '', '', '', ''];
+
+  function createHeart() {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    h.style.left = Math.random() * 100 + '%';
+    h.style.animationDuration = (Math.random() * 6 + 6) + 's';
+    h.style.fontSize = (Math.random() * 20 + 16) + 'px';
+    heartsContainer.appendChild(h);
+    setTimeout(() => h.remove(), 12000);
+  }
+  setInterval(createHeart, 400);
+  for (let i = 0; i < 10; i++) setTimeout(createHeart, i * 200);
+
+  // Progress tracking
+  const totalSteps = 3;
+  const stepsDone = [false, false, false];
+
+  function updateProgress() {
+    stepsDone.forEach((done, i) => {
+      const dot = document.getElementById('dot' + i);
+      if (done) dot.classList.add('done');
+    });
+
+    // unlock final yes button when first 2 are done
+    if (stepsDone[0] && stepsDone[1]) {
+      const finalYes = document.getElementById('finalYes');
+      finalYes.classList.add('unlocked');
+      document.getElementById('lockedHint').textContent = '(go on — make my day )';
+    }
+  }
+
+  // Runaway "No" buttons (and final yes when locked)
+  const teases = [
+    'No ', 'Really? ', 'Sure? ', 'Catch me ',
+    'Nope ', 'Try harder ', 'Hehe ', 'Missed me '
+  ];
+  let dodgeCount = 0;
+
+  function dodge(btn) {
+    dodgeCount++;
+    const maxX = window.innerWidth - btn.offsetWidth - 30;
+    const maxY = window.innerHeight - btn.offsetHeight - 30;
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * (maxY - 100) + 50;
+
+    btn.style.position = 'fixed';
+    btn.style.left = newX + 'px';
+    btn.style.top = newY + 'px';
+    btn.style.transform = 'rotate(' + (Math.random() * 30 - 15) + 'deg)';
+    btn.style.zIndex = 1000;
+    btn.textContent = teases[dodgeCount % teases.length];
+  }
+
+  document.querySelectorAll('.runaway-btn').forEach(btn => {
+    ['mouseover', 'touchstart', 'click', 'focus'].forEach(evt => {
+      btn.addEventListener(evt, e => {
+        e.preventDefault();
+        dodge(btn);
+      });
+    });
+  });
+
+  // Yes buttons
+  document.querySelectorAll('.runaway-yes').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const step = parseInt(btn.dataset.step);
+
+      if (step === 2) {
+        // Final yes — only works if previous steps done
+        if (!(stepsDone[0] && stepsDone[1])) {
+          // dodge it like no button
+          dodge(btn);
+          btn.textContent = 'finish above first ';
+          return;
+        }
+        celebrate();
+        return;
+      }
+
+      // Mark step done
+      stepsDone[step] = true;
+      updateProgress();
+
+      // Show the "answered" message
+      const ans = document.getElementById('ans' + step);
+      if (ans) ans.classList.add('show');
+
+      // Mini confetti burst
+      miniConfetti(btn);
+
+      // Disable button visual
+      btn.style.opacity = '0.7';
+      btn.textContent = ' done!';
+      btn.disabled = true;
+      btn.style.cursor = 'default';
+    });
+  });
+
+  function celebrate() {
+    document.getElementById('finalMessage').classList.add('show');
+    document.getElementById('placeholderMsg').style.display = 'none';
+    document.getElementById('finalMessage').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    stepsDone[2] = true;
+    updateProgress();
+    launchConfetti();
+
+    const finalYes = document.getElementById('finalYes');
+    finalYes.textContent = 'Thank you ';
+    finalYes.classList.remove('unlocked');
+    finalYes.disabled = true;
+    document.querySelectorAll('#finalButtons .btn-no').forEach(b => b.style.display = 'none');
+    document.getElementById('lockedHint').textContent = 'you are the absolute best ';
+  }
+
+  function miniConfetti(originBtn) {
+    const rect = originBtn.getBoundingClientRect();
+    const colors = ['#ff6b9d', '#d6336c', '#ffb3c6', '#ffd700'];
+    const emojis = ['', '', '', ''];
+
+    for (let i = 0; i < 25; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = (rect.left + rect.width / 2) + 'px';
+      c.style.top = (rect.top) + 'px';
+      c.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+
+      if (Math.random() > 0.5) {
+        c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        c.style.fontSize = (Math.random() * 15 + 14) + 'px';
+        c.style.background = 'transparent';
+      } else {
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      }
+
+      const angle = (Math.PI * 2 * i) / 25;
+      const dx = Math.cos(angle) * (Math.random() * 200 + 50);
+      c.style.setProperty('--dx', dx + 'px');
+      c.style.transform = 'translateX(' + dx + 'px)';
+
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }
+  }
+
+  function launchConfetti() {
+    const colors = ['#ff6b9d', '#d6336c', '#ffb3c6', '#fff', '#ffd700', '#ff85a2'];
+    const emojis = ['', '', '', '', '', ''];
+
+    for (let i = 0; i < 150; i++) {
+      setTimeout(() => {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.animationDuration = (Math.random() * 3 + 2) + 's';
+
+        if (Math.random() > 0.5) {
+          c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          c.style.fontSize = (Math.random() * 20 + 15) + 'px';
+          c.style.background = 'transparent';
+        } else {
+          c.style.background = colors[Math.floor(Math.random() * colors.length)];
+          c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        }
+
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 6000);
+      }, i * 30);
+    }
+  }
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('section').forEach((s, i) => {
+    if (i === 0) return;
+    s.style.opacity = '0';
+    s.style.transform = 'translateY(40px)';
+    s.style.transition = 'all 1s ease';
+    observer.observe(s);
+  });
+</script>
+
+</body>
+</html>
